@@ -152,6 +152,37 @@ Add a specific slide type to an existing presentation.
 /slidev:add code-comparison
 ```
 
+### `/secrets:init [account]`
+
+Set up 1Password + direnv for secure secret management in your project.
+
+```text
+/secrets:init
+/secrets:init mycompany.1password.com
+```
+
+**Creates:**
+
+- `.env.op` - Secret references (safe to commit)
+- `.envrc` - direnv loader (gitignored)
+- Updates `.gitignore` with direnv entries
+
+### `/secrets:migrate [env-file]`
+
+Convert an existing `.env` file to `.env.op` format with 1Password references.
+
+```text
+/secrets:migrate
+/secrets:migrate .env.local
+```
+
+**Features:**
+
+- Automatically classifies secrets vs. static config
+- Preserves comments and structure
+- Generates CLI command to create 1Password item
+- Provides security checklist
+
 ## Project Structure
 
 ```text
@@ -167,13 +198,16 @@ cf-devtools/
 │   └── 1password-direnv-secrets/
 │       └── SKILL.md       # Skill definition
 ├── commands/
-│   └── slidev/            # Slidev slash commands
-│       ├── plan.md        # /slidev:plan
-│       ├── from-plan.md   # /slidev:from-plan
-│       ├── from-codebase.md  # /slidev:from-codebase
-│       ├── new.md         # /slidev:new
-│       ├── export.md      # /slidev:export
-│       └── add.md         # /slidev:add
+│   ├── slidev/            # Slidev slash commands
+│   │   ├── plan.md        # /slidev:plan
+│   │   ├── from-plan.md   # /slidev:from-plan
+│   │   ├── from-codebase.md  # /slidev:from-codebase
+│   │   ├── new.md         # /slidev:new
+│   │   ├── export.md      # /slidev:export
+│   │   └── add.md         # /slidev:add
+│   └── secrets/           # Secrets management commands
+│       ├── init.md        # /secrets:init
+│       └── migrate.md     # /secrets:migrate
 ├── agents/                # Custom agents (future)
 └── docs/                  # Documentation
 ```
