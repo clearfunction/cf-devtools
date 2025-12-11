@@ -1,6 +1,35 @@
-# Clear Function Claude Skills - Development Guidelines
+# CF DevTools - Development Guidelines
 
-This plugin provides Claude Code skills for presentations, documentation, and developer workflows.
+## Project Overview
+
+**WHAT:** Claude Code plugin with 2 skills (slidev-presentations, 1password-direnv-secrets) and 8 slash commands.
+
+**WHY:** Production-ready developer workflows for Clear Function's enterprise clients - presentations and secrets management.
+
+**HOW:** Skills in `skills/`, commands in `commands/`. Test locally before committing.
+
+## Quick Commands
+
+```bash
+# Install locally for testing
+/plugin add /path/to/cf-devtools
+
+# Verify plugin structure
+ls -la .claude-plugin/
+cat .claude-plugin/plugin.json | jq .
+
+# Test a skill activates (in Claude Code)
+"Create a presentation about React hooks"      # Should trigger slidev-presentations
+"Set up 1Password with direnv"                 # Should trigger 1password-direnv-secrets
+
+# Test a command works
+/slidev:new test topic
+/secrets:init
+
+# Validate before commit
+find skills -name "SKILL.md" -exec head -10 {} \;  # Check frontmatter
+wc -l skills/*/SKILL.md                            # Check line counts (<500)
+```
 
 ## Skill Authoring Best Practices
 
@@ -157,13 +186,6 @@ skills/
 commands/
 └── skill-name/            # Slash commands (optional)
 ```
-
-### Markdown Standards
-
-- Bullet points use `-` not `*` or `+`
-- Code blocks specify language
-- Tables are properly aligned
-- No trailing whitespace
 
 ### Validation Checklist
 
