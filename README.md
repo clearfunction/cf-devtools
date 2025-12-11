@@ -44,6 +44,53 @@ Generate browser-based presentations using [Slidev](https://sli.dev/) - the pres
 Create a technical presentation about Kubernetes architecture for a DevOps team
 ```
 
+## Slash Commands
+
+### `/slidev:new [topic]`
+
+Quick-start a new presentation on any topic.
+
+```text
+/slidev:new React hooks for beginners
+/slidev:new our new authentication system
+```
+
+### `/slidev:from-codebase [path]`
+
+**Interactive codebase analysis** - Analyzes your project, asks targeted questions about audience and focus areas, then generates a tailored presentation.
+
+```text
+/slidev:from-codebase
+/slidev:from-codebase ./packages/api
+```
+
+Questions asked:
+
+- Target audience (onboarding, architecture review, API docs, stakeholders)
+- Focus areas (architecture, features, API, data models, testing, DevOps)
+- Technical depth level
+- Presentation length
+
+### `/slidev:export [format]`
+
+Export presentation to PDF, PNG, or PPTX.
+
+```text
+/slidev:export           # PDF (default)
+/slidev:export pptx      # PowerPoint
+/slidev:export png       # Images
+```
+
+### `/slidev:add [layout]`
+
+Add a specific slide type to an existing presentation.
+
+```text
+/slidev:add two-cols
+/slidev:add architecture
+/slidev:add code-comparison
+```
+
 ## Project Structure
 
 ```text
@@ -54,9 +101,15 @@ clearfunction-claude-skills/
 ├── skills/
 │   └── slidev-presentations/
 │       ├── SKILL.md       # Skill definition
-│       └── references/    # Slidev documentation
+│       ├── references/    # Syntax documentation
+│       └── assets/        # Example presentations
+├── commands/
+│   └── slidev/            # Slidev slash commands
+│       ├── new.md         # /slidev:new
+│       ├── from-codebase.md  # /slidev:from-codebase
+│       ├── export.md      # /slidev:export
+│       └── add.md         # /slidev:add
 ├── agents/                # Future: Custom agents
-├── commands/              # Future: Slash commands
 └── docs/                  # Documentation
 ```
 

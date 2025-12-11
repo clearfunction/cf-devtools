@@ -209,9 +209,98 @@ graph TD
 See reference files for complete documentation:
 
 - **Shiki Magic Move** - Animated code transitions between states
-- **Monaco Editor** - Interactive, editable code blocks
+- **Monaco Editor** - Interactive, editable code blocks (see below)
 - **Vue Components** - Custom components in `components/` directory
 - **UnoCSS** - Utility-first CSS classes (built-in)
 - **Multi-file splitting** - `src: ./pages/section.md` to import slides
 - **LaTeX Math** - `$E = mc^2$` inline, `$$...$$` for blocks
 - **MDC Syntax** - `[styled text]{style="color:red"}` (requires `mdc: true`)
+
+### v-mark Rough Annotations
+
+Add hand-drawn style emphasis to any element using RoughNotation:
+
+```html
+<span v-mark.underline>Important concept</span>
+<span v-mark.circle>Key term</span>
+<span v-mark.highlight="{ color: 'yellow' }">Highlighted</span>
+<span v-mark.box>Boxed content</span>
+<span v-mark.strike>Crossed out</span>
+```
+
+Click-triggered marks (appears on specific click):
+
+```html
+<span v-mark.underline="3">Appears on click 3</span>
+```
+
+Types: `underline`, `circle`, `highlight`, `box`, `bracket`, `strike-through`
+
+### Runnable Monaco Editor
+
+Live code execution in slides - perfect for workshops and demos:
+
+````markdown
+```typescript {monaco-run}
+// Audience can edit AND execute this code
+const result = [1, 2, 3].map(x => x * 2)
+console.log(result) // Output appears below!
+```
+````
+
+Use `{monaco-run}` instead of `{monaco}` to enable execution with output display.
+
+### Live Drawing & Annotations
+
+Built-in drawing tools (powered by drauu) for live annotation during presentations:
+
+- Press `d` to toggle drawing mode
+- Annotations persist across slide navigation
+- Configure in frontmatter:
+
+```yaml
+---
+drawings:
+  enabled: true
+  persist: true
+  presenterOnly: false
+---
+```
+
+### Click-Synced Presenter Notes
+
+Sync presenter notes to your click animations using `[click]` markers:
+
+```markdown
+# Slide Title
+
+<v-clicks>
+
+- Point A
+- Point B
+- Point C
+
+</v-clicks>
+
+<!--
+[click] Explain point A in detail
+[click] Now discuss point B
+[click] Finally cover point C
+-->
+```
+
+The presenter view shows only the relevant note section as you progress through clicks.
+
+### Icons (UnoCSS Icons)
+
+Access 100k+ icons from Iconify using UnoCSS class syntax:
+
+```html
+<div class="i-carbon-logo-github text-4xl" />
+<div class="i-mdi-heart text-red-500 text-3xl" />
+<div class="i-heroicons-check-circle text-green-500" />
+```
+
+Format: `i-{collection}-{icon-name}`
+
+Browse icons: https://icones.js.org/
