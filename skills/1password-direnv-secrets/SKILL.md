@@ -1,117 +1,89 @@
 ---
 name: 1password-direnv-secrets
-description: Use when setting up 1Password CLI with direnv for automatic secret loading, or when secrets load slowly (>2 seconds) - provides the fast op-run pattern instead of slow multiple op-read calls
+description: Configures 1Password CLI with direnv for fast secret loading using op-run pattern. Activates for: 1Password + direnv setup, slow secrets (>2 sec), environment variables from 1Password, .env.op files, op:// references, or migrating from multiple op-read calls to single op-run.
 ---
 
 # 1Password + direnv Secret Management
-
-Load secrets automatically from 1Password when entering a directory, using the fast single-invocation pattern.
 
 ## Core Pattern
 
 **Use `op run --env-file` NOT multiple `op read` calls.**
 
-| Approach           | CLI Invocations    | Load Time  |
-| ------------------ | ------------------ | ---------- |
-| Multiple `op read` | N (one per secret) | ~5 seconds |
-| Single `op run`    | 1                  | ~1 second  |
+| Approach           | CLI Invocations | Load Time  |
+| ------------------ | --------------- | ---------- |
+| Multiple `op read` | N per secret    | ~5 seconds |
+| Single `op run`    | 1               | ~1 second  |
 
-## File Structure
+## Prerequisites
 
-```text
-project/
-  .env.op    # Template with op:// references (SAFE TO COMMIT)
-  .envrc     # direnv config (gitignored)
-  .gitignore # Excludes .envrc
+```bash
+brew install --cask 1password-cli && brew install direnv
+echo 'eval "$(direnv hook zsh)"' >> ~/.zshrc
+op signin --account=yourcompany.1password.com
 ```
 
 ## Implementation
 
-### 1. Create `.env.op` (commit this)
+**1. `.env.op`** (commit this - op:// refs are NOT secrets):
 
 ```bash
-# .env.op - Secret references only, no actual secrets
-AWS_ACCESS_KEY_ID="op://VaultName/ItemName/AWS Access Key ID"
-AWS_SECRET_ACCESS_KEY="op://VaultName/ItemName/AWS Secret Access Key"
-DB_HOST="op://VaultName/ItemName/Database Host"
-DB_PASSWORD="op://VaultName/ItemName/Database Password"
+AWS_ACCESS_KEY_ID="op://Vault/Item/AWS Access Key ID"
+AWS_SECRET_ACCESS_KEY="op://Vault/Item/AWS Secret Access Key"
+DB_PASSWORD="op://Vault/Item/Database Password"
+DB_PORT="3306"  # Static values work too
 ```
 
-### 2. Create `.envrc` (gitignored)
+**2. `.envrc`** (gitignored):
 
 ```bash
-# .envrc - The magic one-liner
-direnv_load op run \
-  --env-file=.env.op \
-  --no-masking \
-  --account=yourcompany.1password.com \
-  -- direnv dump
+direnv_load op run --env-file=.env.op --no-masking \
+  --account=yourcompany.1password.com -- direnv dump
 ```
 
-### 3. Update `.gitignore`
+**3. `.gitignore`**: Add `.envrc` and `.direnv/`
 
-```gitignore
-.envrc
-.direnv/
-```
+**4. Enable**: `direnv allow`
 
-### 4. Enable
+## Global Helper (Optional)
+
+Add to `~/.config/direnv/direnvrc`:
 
 ```bash
-direnv allow
+use_1password() {
+  local env_file="${1:-.env.op}" account="${2:-yourcompany.1password.com}"
+  [[ -f "$env_file" ]] && direnv_load op run --env-file="$env_file" \
+    --no-masking --account="$account" -- direnv dump
+}
 ```
+
+Then `.envrc` becomes: `use 1password`
 
 ## What's Safe to Commit?
 
-| File                       | Contains                   | Safe to Commit? |
-| -------------------------- | -------------------------- | --------------- |
-| `.env.op`                  | `op://` references only    | **Yes**         |
-| `.envrc`                   | Account name, direnv logic | No (gitignored) |
-| `.env` with actual secrets | Real credentials           | **Never**       |
+| File      | Safe? | Why                             |
+| --------- | ----- | ------------------------------- |
+| `.env.op` | Yes   | Contains only `op://` pointers  |
+| `.envrc`  | No    | Has account name (gitignore it) |
+| `.env`    | Never | Contains actual secrets         |
 
-**Key insight**: `op://vault/item/field` references are NOT secrets - they're just pointers. Safe to commit.
-
-## Adding New Secrets
-
-1. Add field in 1Password item
-2. Add reference to `.env.op`:
-
-   ```bash
-   NEW_VAR="op://VaultName/ItemName/New Field"
-   ```
-
-3. Re-enter directory: `cd .. && cd -`
-
-## Common Mistakes
-
-| Mistake                            | Fix                                   |
-| ---------------------------------- | ------------------------------------- |
-| Multiple `op read` calls           | Use `op run --env-file` pattern       |
-| Putting op:// refs in `.envrc`     | Use separate `.env.op` template       |
-| Thinking op:// refs are secrets    | They're safe references, commit them  |
-| Creating `.envrc.example` template | Use `.env.op` as the template instead |
+**Secret lifecycle**: 1Password (encrypted) → resolved on-demand → memory only → cleared on exit
 
 ## Troubleshooting
 
+| Error                             | Fix                                       |
+| --------------------------------- | ----------------------------------------- |
+| `op: command not found`           | `brew install --cask 1password-cli`       |
+| `direnv: error .envrc is blocked` | `direnv allow`                            |
+| `could not find item`             | Check vault/item names match exactly      |
+| Secrets not loading               | Test: `op read "op://Vault/Item/Field"`   |
+| Slow loading (>2 sec)             | Ensure using `op run`, not multiple reads |
+
+## Alternative: `op inject` (Single File)
+
 ```bash
-# Verify 1Password CLI
-op --version
-
-# Sign in
-op signin --account=yourcompany.1password.com
-
-# Test single reference
-op read "op://VaultName/ItemName/FieldName" --account=yourcompany.1password.com
-
-# Allow direnv
-direnv allow
-
-# Force reload
-direnv reload
+# .envrc - no separate .env.op needed
+export AWS_KEY="op://Vault/Item/Field"
+source <(printenv | grep "op://" | op inject --account=yourcompany.1password.com)
 ```
 
-## References
-
-- [1Password: Load secrets into environment](https://developer.1password.com/docs/cli/secrets-environment-variables/)
-- [1Password: Secret reference syntax](https://developer.1password.com/docs/cli/secret-references/)
-- [direnv stdlib: direnv_load](https://direnv.net/man/direnv-stdlib.1.html)
+Simpler but refs briefly visible in env before resolution.

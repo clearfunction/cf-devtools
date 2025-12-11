@@ -1,6 +1,6 @@
 ---
 name: slidev-presentations
-description: Generates Slidev markdown presentations when users request slides, technical talks, conference presentations, or developer-focused slide decks with code examples
+description: Creates Slidev markdown presentations for developers. Activates for: slides with code highlighting, technical talks, conference presentations, workshop materials, live coding decks, or markdown-based slides. Not for PowerPoint/Google Slides or non-presentation documents.
 ---
 
 # Slidev Presentations Skill
