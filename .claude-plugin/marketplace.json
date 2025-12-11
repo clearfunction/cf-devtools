@@ -1,11 +1,15 @@
 {
   "name": "cf-devtools",
-  "displayName": "Clear Function DevTools",
-  "description": "Production-ready Claude Code skills for presentations, secrets management, and developer workflows",
   "owner": {
     "name": "Clear Function",
     "url": "https://clearfunction.com"
   },
-  "category": "productivity",
-  "tags": ["presentations", "slidev", "secrets", "1password", "developer-tools", "enterprise"]
+  "plugins": [
+    {
+      "name": "cf-devtools",
+      "source": "./",
+      "version": "0.1.0",
+      "description": "Production-ready Claude Code skills for presentations, secrets management, and developer workflows"
+    }
+  ]
 }
