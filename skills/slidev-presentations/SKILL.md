@@ -39,6 +39,57 @@ Do NOT activate for:
 - Non-presentation Markdown files
 - Requests for presentation tips without actual slide creation
 
+## Recommended Workflow
+
+Follow the **plan-first approach** for quality presentations:
+
+```text
+1. Gather Context  →  2. Create Plan  →  3. Review Plan  →  4. Generate Slides
+```
+
+### Why Plan First?
+
+- Plans capture audience, duration, and core message
+- Review checkpoint before investing in slide generation
+- Plans become presenter notes and Q&A preparation
+- Easier to iterate on structure than on finished slides
+
+### Workflow Options
+
+| Scenario                      | Command                                         | Output        |
+| ----------------------------- | ----------------------------------------------- | ------------- |
+| New presentation on a topic   | `/slidev:plan [topic]` then `/slidev:from-plan` | Plan + Slides |
+| Presentation about a codebase | `/slidev:from-codebase [path]`                  | Plan + Slides |
+| Quick slides (skip planning)  | `/slidev:new [topic]`                           | Slides only   |
+| Generate from existing plan   | `/slidev:from-plan [plan-file]`                 | Slides only   |
+
+### Plan Document Structure
+
+A presentation plan includes:
+
+- **Metadata**: Duration, audience, format, venue
+- **Core Message**: The ONE thing to remember
+- **Time Allocation**: Section breakdown with minutes
+- **Section Details**: Key points, visuals needed, talking points
+- **Diagrams to Create**: Architecture, flow, comparisons
+- **Code Examples**: Files, lines, what to highlight
+- **Demo Plan**: What to show, commands, backup plan
+- **Q&A Preparation**: Anticipated questions and answers
+- **Presenter Checklist**: Before/during presentation tasks
+
+### Questions to Gather
+
+When creating a plan, gather:
+
+1. **Duration**: Lightning (5-10 min) to deep dive (45-60 min)
+2. **Audience**: Peers, leadership, external, onboarding
+3. **Format**: Lecture, demo-heavy, workshop, Q&A-heavy
+4. **Venue**: Team meeting, conference, client presentation
+5. **Focus Areas**: Architecture, features, API, testing, DevOps
+6. **Technical Depth**: High-level, moderate, deep dive
+7. **Core Message**: What's the ONE thing to remember?
+8. **Call to Action**: What should audience DO after?
+
 ## Example Outputs
 
 See the `assets/` directory for complete example presentations:
@@ -303,4 +354,4 @@ Access 100k+ icons from Iconify using UnoCSS class syntax:
 
 Format: `i-{collection}-{icon-name}`
 
-Browse icons: https://icones.js.org/
+Browse icons: <https://icones.js.org/>

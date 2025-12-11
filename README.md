@@ -44,20 +44,50 @@ Generate browser-based presentations using [Slidev](https://sli.dev/) - the pres
 Create a technical presentation about Kubernetes architecture for a DevOps team
 ```
 
-## Slash Commands
+## Recommended Workflow
 
-### `/slidev:new [topic]`
-
-Quick-start a new presentation on any topic.
+Follow the **plan-first approach** for quality presentations:
 
 ```text
-/slidev:new React hooks for beginners
-/slidev:new our new authentication system
+Context → Plan → Review → Slides
+```
+
+| Scenario                     | Commands                             | Output        |
+| ---------------------------- | ------------------------------------ | ------------- |
+| Topic-based presentation     | `/slidev:plan` → `/slidev:from-plan` | Plan + Slides |
+| Codebase presentation        | `/slidev:from-codebase`              | Plan + Slides |
+| Quick slides (skip planning) | `/slidev:new`                        | Slides only   |
+
+## Slash Commands
+
+### `/slidev:plan [topic]`
+
+Create a detailed presentation plan before generating slides. Asks questions about audience, duration, format, and content focus.
+
+```text
+/slidev:plan React hooks deep dive
+/slidev:plan our Q4 engineering roadmap
+```
+
+**Output:** `{topic}-presentation-plan.md` with:
+
+- Time allocation table
+- Section outlines with talking points
+- Diagrams and code examples to include
+- Demo plan with backup options
+- Q&A preparation
+
+### `/slidev:from-plan [plan-file]`
+
+Generate slides from an approved presentation plan.
+
+```text
+/slidev:from-plan react-hooks-presentation-plan.md
 ```
 
 ### `/slidev:from-codebase [path]`
 
-**Interactive codebase analysis** - Analyzes your project, asks targeted questions about audience and focus areas, then generates a tailored presentation.
+**Full workflow** - Analyzes your codebase, asks targeted questions, creates a plan, then generates slides.
 
 ```text
 /slidev:from-codebase
@@ -66,10 +96,20 @@ Quick-start a new presentation on any topic.
 
 Questions asked:
 
-- Target audience (onboarding, architecture review, API docs, stakeholders)
-- Focus areas (architecture, features, API, data models, testing, DevOps)
-- Technical depth level
-- Presentation length
+- Duration (lightning to deep dive)
+- Audience (peers, leadership, external, onboarding)
+- Format (lecture, demo-heavy, workshop)
+- Focus areas (architecture, features, API, testing, DevOps)
+- Core message and call to action
+
+### `/slidev:new [topic]`
+
+Quick-start a presentation without planning phase (for simple presentations).
+
+```text
+/slidev:new React hooks for beginners
+/slidev:new our new authentication system
+```
 
 ### `/slidev:export [format]`
 
@@ -105,8 +145,10 @@ clearfunction-claude-skills/
 │       └── assets/        # Example presentations
 ├── commands/
 │   └── slidev/            # Slidev slash commands
-│       ├── new.md         # /slidev:new
-│       ├── from-codebase.md  # /slidev:from-codebase
+│       ├── plan.md        # /slidev:plan (create plan)
+│       ├── from-plan.md   # /slidev:from-plan (slides from plan)
+│       ├── from-codebase.md  # /slidev:from-codebase (full workflow)
+│       ├── new.md         # /slidev:new (quick slides)
 │       ├── export.md      # /slidev:export
 │       └── add.md         # /slidev:add
 ├── agents/                # Future: Custom agents

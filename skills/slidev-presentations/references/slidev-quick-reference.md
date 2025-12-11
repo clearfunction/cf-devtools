@@ -497,6 +497,88 @@ npx slidev export --format pptx  # Export to PowerPoint
 | `←` / `↑`           | Previous                 |
 | `f`                 | Toggle fullscreen        |
 | `o`                 | Toggle overview          |
-| `d`                 | Toggle dark mode         |
+| `d`                 | Toggle drawing mode      |
 | `g`                 | Go to slide              |
 | `Esc`               | Exit fullscreen/overview |
+
+## v-mark Rough Annotations
+
+Hand-drawn style emphasis using RoughNotation:
+
+```html
+<span v-mark.underline>Important</span>
+<span v-mark.circle>Key term</span>
+<span v-mark.highlight="{ color: 'yellow' }">Highlighted</span>
+<span v-mark.box>Boxed</span>
+<span v-mark.strike>Crossed out</span>
+<span v-mark.bracket>Bracketed</span>
+```
+
+Click-triggered:
+
+```html
+<span v-mark.underline="3">Appears on click 3</span>
+```
+
+Types: `underline`, `circle`, `highlight`, `box`, `bracket`, `strike-through`
+
+## Runnable Monaco Editor
+
+Interactive code with live execution:
+
+````markdown
+```typescript {monaco}
+// Editable code (no execution)
+const x = 1
+```
+
+```typescript {monaco-run}
+// Editable AND executable - output appears below
+console.log([1, 2, 3].map(x => x * 2))
+```
+````
+
+## Live Drawing
+
+Built-in annotation tools (press `d` during presentation):
+
+```yaml
+---
+drawings:
+  enabled: true
+  persist: true
+  presenterOnly: false
+---
+```
+
+## Click-Synced Presenter Notes
+
+Use `[click]` markers to sync notes with animations:
+
+```markdown
+<v-clicks>
+
+- Point A
+- Point B
+
+</v-clicks>
+
+<!--
+[click] Notes for Point A
+[click] Notes for Point B
+-->
+```
+
+## Icons (UnoCSS)
+
+100k+ icons from Iconify:
+
+```html
+<div class="i-carbon-logo-github text-4xl" />
+<div class="i-mdi-heart text-red-500" />
+<div class="i-heroicons-check-circle" />
+```
+
+Format: `i-{collection}-{icon-name}`
+
+Browse: <https://icones.js.org/>
