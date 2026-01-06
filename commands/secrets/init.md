@@ -94,7 +94,7 @@ API_KEY="op://Vault/Item/Field"       # TODO: Update with actual 1Password path
 
 ```bash
 # Load secrets from 1Password using direnv
-# This file is gitignored - contains account-specific configuration
+# Safe to commit - no secrets, just delegates to .env.op
 
 direnv_load op run --env-file=.env.op --no-masking \
   --account=ACCOUNT_DOMAIN -- direnv dump
@@ -108,13 +108,14 @@ Check if `.gitignore` exists. If so, append (if not already present):
 
 ```text
 # 1Password + direnv
-.envrc
 .direnv/
 .env
 .env.local
 ```
 
 If no `.gitignore`, create one with these entries.
+
+> Note: `.envrc` is safe to commit - it contains no secrets, just a loader command that delegates to `.env.op`.
 
 ## Phase 4: Finalize Setup
 
@@ -131,7 +132,7 @@ If no `.gitignore`, create one with these entries.
 
    Files created:
    - .env.op     (safe to commit - add your op:// references here)
-   - .envrc      (gitignored - loads secrets via 1Password)
+   - .envrc      (safe to commit - no secrets, just loader command)
    - .gitignore  (updated with direnv entries)
 
    Next steps:
